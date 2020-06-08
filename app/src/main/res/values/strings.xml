@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Movies_and_Actors</string>
+
+    <string name="adrijana_savic">Adrijana Savić</string>
+
+    <string name="splashtime_key">splashtime_settings</string>
+    <string name="splash_key">splash_settings</string>
+
 </resources>
