@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movies_and_actors.DividerKlasa;
 import com.example.movies_and_actors.R;
+import com.example.movies_and_actors.adapters.AdapterFilmovi;
 import com.example.movies_and_actors.adapters.AdapterSearch;
 import com.example.movies_and_actors.models.MoviesResponse;
 import com.example.movies_and_actors.models.ResultsMovieItem;
@@ -25,11 +26,14 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import static com.example.movies_and_actors.net.MyServiceContract.APIKEY1;
 
-public class MainActivity extends AppCompatActivity implements AdapterSearch.OnItemClickListener{
+public class MainActivity extends AppCompatActivity implements AdapterSearch.OnItemClickListener, AdapterFilmovi.OnItemClickListener{
 
     private AdapterSearch adapterSearch;
+    private AdapterFilmovi adapterFilmovi;
+
     private List<ResultsMovieItem> searchedMovieList;
     private RecyclerView popularRecycler, topRatedRecycler, upcomingRecycler, searchRecycler;
     private ScrollView glavni_layout;
@@ -41,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements AdapterSearch.OnI
         setContentView( R.layout.activity_main );
 
         initViews();
+
+        getPopularMovies();
+
     }
 
     @Override
@@ -109,6 +116,49 @@ public class MainActivity extends AppCompatActivity implements AdapterSearch.OnI
         upcomingRecycler.setItemViewCacheSize( 20 );
     }
 
+    private void getPopularMovies() {
+        MyService1.apiInterface().getPopularMovies(APIKEY1, "GB")
+                .enqueue(new Callback<MoviesResponse>() {
+                    @Override
+                    public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                        if (response.code() == 200) {
+                            try {
+
+                                searchedMovieList = response.body().getResults();
+
+                                Log.v("onResponse", searchedMovieList.size() + " Movies");
+
+                                linearLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                                popularRecycler.setLayoutManager(linearLayoutManager);
+
+                                adapterFilmovi = new AdapterFilmovi(MainActivity.this, searchedMovieList, MainActivity.this);
+
+                                popularRecycler.setAdapter(adapterFilmovi);
+
+
+                            } catch (NullPointerException e) {
+//                                Toast.makeText(MainActivity.this, "Ne postoji film/serija sa tim nazivom", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+
+//                            Log.v("response.code", " Greska sa serverom");
+                            Toast.makeText(MainActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<MoviesResponse> call, Throwable t) {
+//                        Log.v("onFailure", " Failed to get movies");
+                        Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+    }
+
+
     private void searchMovieByName(String query) {
         MyService1.apiInterface().searchForMovies(query, APIKEY1)
                 .enqueue(new Callback<MoviesResponse>() {
@@ -149,6 +199,11 @@ public class MainActivity extends AppCompatActivity implements AdapterSearch.OnI
 
     @Override
     public void onSearchMovieClick(int position) {
+
+    }
+
+    @Override
+    public void onItemClick(int position) {
 
     }
 }
