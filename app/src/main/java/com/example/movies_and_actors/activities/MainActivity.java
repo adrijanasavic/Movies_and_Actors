@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements AdapterSearch.OnI
         upcomingRecycler.setItemViewCacheSize( 20 );
     }
 
+
     private void getPopularMovies() {
         MyService1.apiInterface().getPopularMovies(APIKEY1, "GB")
                 .enqueue(new Callback<MoviesResponse>() {
