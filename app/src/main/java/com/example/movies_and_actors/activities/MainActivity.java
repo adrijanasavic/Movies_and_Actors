@@ -17,6 +17,7 @@ import com.example.movies_and_actors.DividerKlasa;
 import com.example.movies_and_actors.R;
 import com.example.movies_and_actors.adapters.AdapterFilmovi;
 import com.example.movies_and_actors.adapters.AdapterSearch;
+import com.example.movies_and_actors.adapters.AdapterTopMovies;
 import com.example.movies_and_actors.models.MoviesResponse;
 import com.example.movies_and_actors.models.ResultsMovieItem;
 import com.example.movies_and_actors.net.MyService1;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements AdapterSearch.OnI
 
     private AdapterSearch adapterSearch;
     private AdapterFilmovi adapterFilmovi;
+    private AdapterTopMovies adapterTopMovies;
 
     private List<ResultsMovieItem> searchedMovieList;
     private RecyclerView popularRecycler, topRatedRecycler, upcomingRecycler, searchRecycler;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements AdapterSearch.OnI
         initViews();
 
         getPopularMovies();
+        getTopRatedMovies();
 
     }
 
@@ -114,6 +117,48 @@ public class MainActivity extends AppCompatActivity implements AdapterSearch.OnI
 
         upcomingRecycler.setHasFixedSize( true );
         upcomingRecycler.setItemViewCacheSize( 20 );
+    }
+
+    private void getTopRatedMovies() {
+        MyService1.apiInterface().getTopRatedMovies(APIKEY1, "GB")
+                .enqueue(new Callback<MoviesResponse>() {
+                    @Override
+                    public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                        if (response.code() == 200) {
+                            try {
+
+                                searchedMovieList = response.body().getResults();
+
+                                Log.v("onResponse", searchedMovieList.size() + " Movies");
+
+                                linearLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                                topRatedRecycler.setLayoutManager(linearLayoutManager);
+
+                                adapterTopMovies = new AdapterTopMovies(MainActivity.this, searchedMovieList);
+
+                                topRatedRecycler.setAdapter(adapterTopMovies);
+
+
+                            } catch (NullPointerException e) {
+//                                Toast.makeText(MainActivity.this, "Ne postoji film/serija sa tim nazivom", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+
+                            Log.v("response.code", " Greska sa serverom");
+                            Toast.makeText(MainActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                        Log.v("onFailure", " Failed to get movies");
+                        Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
     }
 
 
