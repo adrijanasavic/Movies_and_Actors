@@ -1,5 +1,6 @@
 package com.example.movies_and_actors.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -290,11 +291,19 @@ public class MainActivity extends AppCompatActivity implements AdapterSearch.OnI
 
     @Override
     public void onSearchMovieClick(int position) {
+        ResultsMovieItem resultsMovieItem = adapterSearch.get( position );
 
+        Intent i = new Intent( MainActivity.this, DetailsMovie.class );
+        i.putExtra( "id", resultsMovieItem.getId() );
+        startActivity( i );
     }
 
     @Override
     public void onItemClick(int position) {
+        ResultsMovieItem resultsMovieItem = adapterFilmovi.get( position );
 
+        Intent i = new Intent( MainActivity.this, DetailsMovie.class );
+        i.putExtra( "id", resultsMovieItem.getId() );
+        startActivity( i );
     }
 }
