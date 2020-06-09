@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import com.example.movies_and_actors.MainActivity;
+import com.example.movies_and_actors.activities.MainActivity;
 import com.example.movies_and_actors.R;
 
 import java.io.IOException;
