@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.movies_and_actors.R;
 import com.example.movies_and_actors.activities.DetailsMovie;
-import com.example.movies_and_actors.model_actor.Cast;
 
 import java.util.List;
 
@@ -25,7 +24,8 @@ import static com.example.movies_and_actors.net.MyServiceContract.IMAGEBASEURL;
 public class AdapterSviFilmovi extends RecyclerView.Adapter<AdapterSviFilmovi.MyViewHolder> {
 
     private Context context;
-    private List<Cast> searchItems;
+    private List<com.example.movies_and_actors.models.Cast> searchItems;
+
 
     public String firstFour(String godina) {
         if (godina == null) {
@@ -39,7 +39,7 @@ public class AdapterSviFilmovi extends RecyclerView.Adapter<AdapterSviFilmovi.My
 
     }
 
-    public AdapterSviFilmovi(Context context, List<Cast> searchItems) {
+    public AdapterSviFilmovi(Context context, List<com.example.movies_and_actors.models.Cast> searchItems) {
         this.context = context;
         this.searchItems = searchItems;
     }
