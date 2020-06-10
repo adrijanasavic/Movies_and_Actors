@@ -8,6 +8,7 @@ import com.example.movies_and_actors.R;
 
 public class DetailsMovie extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );

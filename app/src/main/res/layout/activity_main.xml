@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
     android:orientation="vertical"
     android:overScrollMode="ifContentScrolls"
@@ -25,7 +26,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:srcCompat="@drawable/gradient_bg" >
 
             <TextView
                 android:id="@+id/textView"
